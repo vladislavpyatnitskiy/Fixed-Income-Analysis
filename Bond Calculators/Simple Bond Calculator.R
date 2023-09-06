@@ -24,4 +24,4 @@ simple_bond_calculator <- function(bond_principle,
   return(price_of_the_bond)
 }
 # Test it
-simple_bond_calculator(1000, 0.8, 0.06, 30, 2)
+simple_bond_calculator(1000, 0.08, 0.06, 30, 2)
