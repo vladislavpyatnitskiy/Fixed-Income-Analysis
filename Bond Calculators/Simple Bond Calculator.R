@@ -6,7 +6,7 @@ simple_bond_calculator <- function(bond_principle,
                             n_an_b = 1
                             ){
   # Calculate coupon part
-  coupon_part <- bond_coupon_rate / n_an_b
+  coupon_part <- (bond_coupon_rate * bond_principle) / n_an_b
 
   # Calculate rates part
   bond_rate_part <- ((n_an_b/bond_interest_rate) -
@@ -24,4 +24,4 @@ simple_bond_calculator <- function(bond_principle,
   return(price_of_the_bond)
 }
 # Test it
-simple_bond_calculator(1000, 80, 0.06, 30, 2)
+simple_bond_calculator(1000, 0.8, 0.06, 30, 2)
