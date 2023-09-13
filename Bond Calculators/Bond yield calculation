@@ -1,0 +1,17 @@
+# Bond Cash Flow with initial buy
+bond_payments <- c(-98.39, 3, 3, 3, 103)
+
+# Function to calculate bond NPV
+bond_price_cltn <- function(C, r) {
+  sum(C / (1 + r) ^ ((seq(along = C) - 1))/2)
+}
+
+# Yield Calculation
+bond_r_cltn <- function(C) {
+  uniroot(bond_price_cltn, c(0, 1), C = C)$root * 2
+}
+
+# Test
+bond_price_cltn(C = bond_payments,
+             r = 0.05)
+bond_r_cltn(C = bond_payments)
