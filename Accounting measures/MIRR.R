@@ -8,18 +8,10 @@ cash_flow_for_mirr2 <- c(300, 300, 300, 300) # y = 0.12 cf_0 = 800
 mirr_cash_flow <- function(x,
                            y = 0.1,
                            cf_0 = 1000){
-  # Create variable for cash flow
-  cash_flow_sum <- 0
+
+  # Sum of future cash flows
+  cash_flow_sum <- sum(x * ((1 + y) ^ (length(x) - seq(along = x))))
   
-  # For cash flow for each year
-  for (n in 1:length(x)){
-    
-    # Calculate cash flow for period n
-    cf_n <- (x[n]) * ((1 + y) ^ (length(x)-n))
-    
-    # Sum
-    cash_flow_sum <- cash_flow_sum + cf_n
-  }
   # Calculate MIRR
   mirr_value <- (cash_flow_sum / cf_0) ^ (1/length(x)) - 1
   
