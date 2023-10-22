@@ -8,22 +8,15 @@ exp_bond_calculator <- function(bond_principle,
   # Calculate Principal part
   exp_principal <- bond_principle * exp(-bond_interest_rate * bond_year_to_mat)
   
+  # Define new variable for number of coupon repayments
+  repay <- bond_year_to_mat * n_an_b
+  
   # Set up variable name for sum of coupons
-  exp_coupon <- 0
+  exp_coupon <- sum(((bond_coupon_rate * bond_principle) / n_an_b) *
+                      exp(-bond_interest_rate * (seq(repay) / repay)))
   
-  # Sum Cash Flows
-  for (n in 1:(bond_year_to_mat * n_an_b)){
-    # Calculate Sum of coupons
-    exp_coupon <- exp_coupon +
-      ((bond_coupon_rate * bond_principle) / n_an_b) *
-      exp(-bond_interest_rate *
-            (n / (bond_year_to_mat * n_an_b)))
-  }
-  # Calculate Bond Value
-  exp_bond_value <- exp_principal + exp_coupon
-  
-  # Display Value
-  return(exp_bond_value)
+  # Calculate Bond Value and display it
+  return(exp_principal + exp_coupon)
 }
 # Test
 exp_bond_calculator(100, 0.06, 0.0676, 2, 2)
