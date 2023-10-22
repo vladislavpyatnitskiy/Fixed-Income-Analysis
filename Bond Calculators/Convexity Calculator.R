@@ -1,10 +1,10 @@
 # Function to calculate Bond Convexity
 bond_convexity <- function(bond_principle,
-                      bond_coupon_rate = 0,
-                      bond_interest_rate = 0,
-                      bond_year_to_mat,
-                      n_an_b = 1,
-                      bond_yd_chng = 0.01){
+                           bond_coupon_rate = 0,
+                           bond_interest_rate = 0,
+                           bond_year_to_mat,
+                           n_an_b = 1,
+                           bond_yd_chng = 0.01){
   
   # Bond Price when yield goes down by 1%
   positive_b_chng <- bond_interest_rate - bond_yd_chng
@@ -13,54 +13,43 @@ bond_convexity <- function(bond_principle,
   negative_b_chng <- bond_interest_rate + bond_yd_chng
   
   # Put all interest rate values into one vector
-  bond_i_r <- c(bond_interest_rate,
-                   positive_b_chng,
-                   negative_b_chng)
+  bond_i_r <- c(bond_interest_rate, positive_b_chng, negative_b_chng)
   
   # Create an empty list to contain all price values
-  bond_price_list <- NULL
+  bp_list <- NULL
   
-  # For each bond price
-  for (n in 1:3){
-   
+  # Calculate all 3 prices; product of repayment number and rate
+  for (n in 1:3){ repay <- n_an_b / bond_i_r[n]
+    
+    # Product of maturity and repayment number
+    mat_x_rep <- bond_year_to_mat * n_an_b
+  
     # calculate coupon part
     coupon_part <- (bond_coupon_rate * bond_principle) / n_an_b
-   
+    
     # calculate interest rate part
-    bond_rate_part <- ((n_an_b/(bond_i_r[n])) -
-                        n_an_b/((bond_i_r[n]) *
-                                  (1 + (bond_i_r[n])/n_an_b) ^
-                                  bond_year_to_mat * n_an_b))
+    bond_rate_part <- repay - n_an_b/(bond_i_r[n] * (1 + 1/repay) ^ mat_x_rep)
+    
     # Calculate principle part
-    principle_part <- bond_principle / ((1 + (bond_i_r[n])/n_an_b) ^
-                                         bond_year_to_mat * n_an_b)
+    principle_part <- bond_principle / ((1 + 1 / repay) ^ mat_x_rep)
+    
     # Calculate price of bond
     price_of_the_bond = coupon_part * bond_rate_part + principle_part
-   
+    
     # Add result to list
-    bond_price_list <- cbind(bond_price_list,
-                            price_of_the_bond)
- }
-  # Current price of bond
-  bond_now <- bond_price_list[1]
-  
-  # Bond price when yield goes down
-  bond_up <- bond_price_list[2]
-  
-  # Bond price when yield goes up
-  bond_down <- bond_price_list[3]
+    bp_list <- cbind(bp_list, price_of_the_bond) }
   
   # Calculate Convexity
-  convexity_result <- (bond_up + bond_down - 2 * bond_now) / 
-    (bond_now * (bond_yd_chng ^ 2))
+  convexity_result <- (bp_list[2] + bp_list[3] - 2 * bp_list[1]) /
+    (bp_list[1] * bond_yd_chng ^ 2)
   
   # Display value
   return(convexity_result)
 }
 # Test
 bond_convexity(bond_principle = 1000,
-                           bond_coupon_rate = 0.05,
-                           bond_interest_rate = 0.08,
-                           bond_year_to_mat = 10,
-                           n_an_b = 1,
-                           bond_yd_chng = 0.01)
+               bond_coupon_rate = 0.05,
+               bond_interest_rate = 0.08,
+               bond_year_to_mat = 10,
+               n_an_b = 1,
+               bond_yd_chng = 0.01)
