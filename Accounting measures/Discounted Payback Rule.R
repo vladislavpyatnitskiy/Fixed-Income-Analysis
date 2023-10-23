@@ -1,34 +1,33 @@
 # Cash flows
 cash_flow_for_dpr <- c(100, 100, 100, 100)
 
-# Function to calculate using discounted payback rule
-discounted_payback_rule <- function(x, y = 0.1, cf_0 = 200){
+# Discounted Payback
+DPR <- function(C, r = 0.1, I = 200){
   
   # Define sum of paybacks and value to store period for paybacks
-  discounted_payback_sum <- 0
-  pb_num <- 0
+  DP <- 0
+  period <- 0
   
-  # Until sum of payback is less than initial values
-  while (discounted_payback_sum <= cf_0){
+  # Until sum of payback is less than initial value
+  while (DP <= I){
     
     # For each payback calculate payback
-    for (n in 1:length(x)){ dis_cash_flow <- x[n] / (1 + y) ^ n
+    for (n in 1:length(C)){ DCF <- C[n] / (1 + r) ^ n
+    
+    # Sum paybacks
+    DP <- DP + DCF
+    
+    # When sum of payback is more than initial value
+    if (DP > I){
       
-      # Sum paybacks
-      discounted_payback_sum <- discounted_payback_sum + dis_cash_flow
+      # Get a decimal value and round value
+      period <- ((I - (DP - DCF)) / DCF) + n - 1
       
-      # When sum of payback is more than initial value
-      if (discounted_payback_sum > cf_0){
-        
-        # Get a decimal value and round value
-        pb_num <- round(((cf_0 - (discounted_payback_sum - dis_cash_flow)) /
-                           dis_cash_flow) + n - 1, 2)
-        
-        # Stop as we calculated value we need
-        break } } }
+      # Stop as we calculated value we need
+      break } } }
   
   # Put number into sentence and display value
-  return(sprintf("The payback period is %s years", pb_num))
+  return(sprintf("The payback period is %s years", round(period, 2)))
 }
 # Test
-discounted_payback_rule(x = cash_flow_for_dpr, y = 0.1, cf_0 = 200)
+DPR(C = cash_flow_for_dpr, r = 0.1, I = 200)
