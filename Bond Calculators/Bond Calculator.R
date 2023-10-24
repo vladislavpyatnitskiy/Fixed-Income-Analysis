@@ -1,11 +1,13 @@
 # Bond Calculator
-B.calculator <- function(P, C, r, ytm, f = 1){ 
+B.calculator <- function(P, C, r, ytm, f = 1, exp = F){ 
   
-  # Denominator
-  d <- 1 / (1 + (1 / (f / r))) ^ (ytm * f)
+  # Exponential Valuation
+  if (isTRUE(exp)){ P*exp(-r*ytm) + sum(((C*P)/f)*exp(-r*(seq(ytm*f)/(ytm*f))))
+    
+    # Standard Valuation
+    } else { d <- 1 / (1 + (1 / (f / r))) ^ (ytm * f)
   
-  # Bond Price
-  P * (C / f * (f / r * (1 - d)) + d)
+    P * (C / f * (f / r * (1 - d)) + d) }
 }
 # Test it
-B.calculator(1000, 0.08, 0.06, 30, 2)
+B.calculator(1000, 0.08, 0.06, 30, 2, F)
