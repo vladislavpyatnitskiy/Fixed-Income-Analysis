@@ -1,41 +1,22 @@
 # Duration and Modified Duration
-Duration <- function(P, C, r, ytm, s = 1){
+Duration <- function(P, C, r, ytm, f = 1, s = 1){
   
-  # Maturity for loops
-  ytm.a <- ytm - 1
+  P.part <- (P * (1 + C / f)) / (1 + r) ^ ytm # Calculate part for principle
   
-  # Rate for nominator
-  rt <- 1 + r
-  
-  # Coupon calculation
-  C.part <- C * P
-  
-  # Calculate part for principle
-  P.part <- (P + C.part) / (rt ^ ytm)
-  
-  # Multiply adjusted principle to number of YtM
-  PV.P <- P.part * ytm
-  
-  # Set up duration sum
+  # Duration sum and payments
   PV.sum <- NULL
-  
-  # Calculate PV of coupons
-  for (n in 1:ytm.a){ PV.sum <- cbind(PV.sum, C.part / rt ^ n) }
-  
-  # Set up new list to contain
   payments <- NULL
   
-  # Coupon part for numerator
-  for (n in 1:ytm.a){ payments <- cbind(payments, n * PV.sum[n]) }
+  # Calculate PV of coupons
+  for (n in 1:(ytm-1)){ PV.sum <- cbind(PV.sum, ((C * P ) / f ) / (1 + r ) ^ n) 
+  
+  payments <- cbind(payments, n * PV.sum[n]) } # Coupon part for numerator
   
   # Duration
-  D <- (sum(payments[seq(ytm.a)]) + PV.P) / (P.part + sum(PV.sum[seq(ytm.a)]))
+  D <- (sum(payments[seq(ytm-1)])+P.part*ytm)/(P.part+sum(PV.sum[seq(ytm-1)]))
   
-  # Modified duration
-  MD <- D / (1 + (r - s * 0.01))
-  
-  # Put values into list
-  bond.list <- cbind(round(D, 3), round(MD, 2))
+  # Table with Duration and Modified Duration
+  bond.list <- cbind(round(D, 3), round(D / (1 + (r - s * 0.01)), 2))
   
   # Set column names 
   colnames(bond.list) <- c("Duration", "Modified Duration")
@@ -44,4 +25,4 @@ Duration <- function(P, C, r, ytm, s = 1){
   return(bond.list)
 }
 # Test
-Duration(1000, 0.1, 0.05, 3)
+Duration(1000, 0.1, 0.05, 3, 1, 1)
