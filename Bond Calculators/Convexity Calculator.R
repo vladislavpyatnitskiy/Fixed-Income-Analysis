@@ -1,35 +1,18 @@
 # Convexity
-Convexity <- function(P, C = 0, r = 0, ytm, f = 1, s = 0.01){
+Convexity <- function(P, C = 0, r = 0, ytm, f = 1, s = 1){
   
-  # Put all interest rate values into one vector
-  r.v <- c(r, r - s, r + s)
+  r.Cy <- c(r, r - s * 0.01, r + s * 0.01) # Put all rates into one vector
   
-  # Create an empty list to contain all price values
-  B.list <- NULL
+  v.Cy <- NULL # Create an empty list to contain all price values
   
-  # Calculate all 3 prices; payment frequency
-  for (n in 1:3){ f.r <- f / r.v[n]
+  # Calculate all 3 prices; Product of maturity and repayment number
+  for (n in 1:3){ d <- (1 + 1 / (f / r.Cy[n])) ^ (ytm * f)
   
-    # Denominator
-    d <- (1 + 1 / f.r) ^ (ytm * f)
-    
-    # Coupon part
-    C.part <- (C * P) / f
-    
-    # Rate part
-    r.part <- f.r - f / (r.v[n] * d)
-    
-    # Principle part
-    P.part <- P / d
-    
-    # Price of bond
-    B.price = C.part * r.part + P.part
-    
-    # Add result to list
-    B.list <- cbind(B.list, B.price) }
+    # Calculate price of bond and add result to list
+    v.Cy <- cbind(v.Cy, P * (C * (1 / r.Cy[n] * (1 - 1 / d)) + 1 / d)) }
   
   # Convexity
-  return((B.list[2] + B.list[3] - 2 * B.list[1]) / (B.list[1] * s ^ 2))
+  return(v.Cy[2] + v.Cy[3] - 2 * v.Cy[1]) / (v.Cy[1] * (s * 0.01) ^ 2)
 }
 # Test
-Convexity(P = 1000, C = 0.05, r = 0.08, ytm = 10, f = 1, s = 0.01)
+Convexity(P = 1000, C = 0.1, r = 0.05, ytm = 3, f = 1, s = 1)
