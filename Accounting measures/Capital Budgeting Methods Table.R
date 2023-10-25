@@ -14,7 +14,7 @@ cash.flow.rates <- function(C, r, I){
     
     DP <- DP + DCF # Sum paybacks
     
-    if (DP>I){ period <- ((I-(DP-DCF))/DCF)+n-1 # when payback > initial value
+    if (DP>I){ period <- (I-DP) / DCF + n # when payback > initial value
       
       break } } } # End
   
