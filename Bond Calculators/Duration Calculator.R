@@ -1,22 +1,18 @@
 # Duration and Modified Duration
-Duration <- function(P, C, r, ytm, f = 1, s = 1){
+Duration <- function(P, C, r, ytm, f = 1, s = 1, PV = NULL, payments = NULL){
   
-  P.part <- (P * (1 + C / f)) / (1 + r) ^ ytm # Calculate part for principle
-  
-  # Duration sum and payments
-  PV.sum <- NULL
-  payments <- NULL
+  P. <- P * (1 + C / f) / (1 + r) ^ ytm # Calculate part for principle
   
   # Calculate PV of coupons
-  for (n in 1:(ytm-1)){ PV.sum <- cbind(PV.sum, ((C * P ) / f ) / (1 + r ) ^ n) 
+  for (n in 1:(ytm-1)){ PV <- cbind(PV, (C * P  / f ) / (1 + r ) ^ n) 
   
-  payments <- cbind(payments, n * PV.sum[n]) } # Coupon part for numerator
+  payments <- cbind(payments, n * PV[n]) } # Coupon part for numerator
   
   # Duration
-  D <- (sum(payments[seq(ytm-1)])+P.part*ytm)/(P.part+sum(PV.sum[seq(ytm-1)]))
+  D <- (sum(payments[seq(ytm - 1)]) + P. * ytm) / (P. + sum(PV[seq(ytm - 1)]))
   
   # Table with Duration and Modified Duration
-  bond.list <- cbind(round(D, 3), round(D / (1 + (r - s * 0.01)), 2))
+  bond.list <- cbind(round(D, 3), round(D / (1 + (r - s * 0.01) / f), 2))
   
   # Set column names 
   colnames(bond.list) <- c("Duration", "Modified Duration")
