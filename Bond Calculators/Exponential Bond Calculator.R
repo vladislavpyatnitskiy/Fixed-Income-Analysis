@@ -1,8 +1,7 @@
 # Exponential Bond Calculator
-B.calculator.exp <- function(P, C, r, ytm, f = 1){
+B.calculator.exp <- function(P, C, r, y, f = 1){
   
-  # Bond Value
-  P * exp(-r * ytm) + sum(((C * P) / f) * exp(-r * (seq(ytm * f) / (ytm * f))))
+  P * exp(-r * y) + sum(C * P/f * exp(-r * (seq(y * f)/y/f))) # Bond Value
 }
 # Test
 B.calculator.exp(100, 0.06, 0.0676, 2, 2)
