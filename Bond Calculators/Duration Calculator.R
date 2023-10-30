@@ -1,24 +1,20 @@
 # Duration and Modified Duration
-Duration <- function(P, C, r, ytm, f = 1, s = 1, PV = NULL, payments = NULL){
+Duration <- function(P, C, r, y, f = 1, s = 1, PV = NULL, payments = NULL){
   
-  P. <- P * (1 + C / f) / (1 + r) ^ ytm # Calculate part for principle
+  P. <- P * (1 + C / f) / (1 + r / f) ^ (y * f) # Principle Part
   
-  # Calculate PV of coupons
-  for (n in 1:(ytm-1)){ PV <- cbind(PV, (C * P  / f ) / (1 + r ) ^ n) 
+  for (n in 1:(y*f-1)){ PV <- cbind(PV, C * P/f/(1 + r/f)^(n * f)) # NPV
   
-  payments <- cbind(payments, n * PV[n]) } # Coupon part for numerator
+    p <- cbind(p, n * PV[n]) } # # Coupon PV
   
-  # Duration
-  D <- (sum(payments[seq(ytm - 1)]) + P. * ytm) / (P. + sum(PV[seq(ytm - 1)]))
+  D <- (sum(p[seq(y*f - 1)]) + P.*y*f)/(P. + sum(PV[seq(y*f - 1)])) # Duration
   
   # Table with Duration and Modified Duration
-  bond.list <- cbind(round(D, 3), round(D / (1 + (r - s * 0.01) / f), 2))
+  bond.list <- cbind(round(D, 3), round(D / (1 + (r - s * .01) / f), 2))
   
-  # Set column names 
-  colnames(bond.list) <- c("Duration", "Modified Duration")
+  colnames(bond.list) <- c("Duration", "Modified Duration") # Column names 
   
-  # Display sentence
-  return(bond.list)
+  return(bond.list) # Display sentence
 }
 # Test
 Duration(1000, 0.1, 0.05, 3, 1, 1)
