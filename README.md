@@ -7,7 +7,9 @@ Welcome to the Fixed Income Analysis repository! This collection of tools and sc
 Features
 
 Bond Pricing: Utilise R scripts to calculate the price of fixed-rate bonds based on face value, coupon rate, yield to maturity, and compounding frequency.
+
 Yield Curve Analysis: Visualise and analyse yield curves to gain insights into interest rate movements and their impact on fixed income portfolios.
+
 Duration and Convexity: Compute and understand the duration and convexity of bonds, crucial metrics for assessing interest rate risk.
 
 More detailed info in wiki: https://github.com/vladislavpyatnitskiy/Fixed-Income-Analysis/wiki
