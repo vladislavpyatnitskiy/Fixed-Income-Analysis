@@ -19,10 +19,10 @@ B.table <- function(P, C, r, y, f = 1, s = 1, VaR = 95, PV = NULL, p = NULL){
   v <- NULL # List for all price values
   
   # Calculate all 3 prices; Product of maturity and repayment number
-  for (n in seq(-1, 1, 1)){ d <- (1 + (r + s * n / 100) / f) ^ (y * f)
+  for (n in seq(-1, 1, 1)){ d <- (1 + (r + s * n / 100) / f) ^ -y * f
   
     # Calculate price of bond and add result to list
-    v <- cbind(v, P * (C / (r + s * n / 100) * (1 - 1 / d) + 1 / d)) }
+    v <- cbind(v, P * (C / (r + s * n / 100) * (1 - d) + d)) }
   
   Cy <- (v[1] + v[3] - 2 * v[2]) / v[2] / (s / 100) ^ 2 # Convexity
   
