@@ -1,10 +1,11 @@
 # Table with capital budgeting methods
-cash.flow.rates <- function(C, r, I){ npv <- sum(C/(1 + r)^(seq(C) - 1)) # NPV
-  
-  irr <- function(C){ uniroot(NPV0, c(0, 1), C = C)$root } # IRR
+cash.flow.rates <- function(C, r){ npv <- sum(C/(1 + r)^(seq(C) - 1)) # NPV
+
+  irr <- uniroot(function(C, r) (sum(C/(1+r)^(seq(C)-1))), c(0, 1), C = C)$root
   
   DP <- 0 # Sum of paybacks
   period <- 0 # Payback Period
+  I <- -C[1] # Initial Investment
   C.new <- C[2:length(C)] # Cash flow vector for payback and mirr
   
   # Until sum of payback < initial value (IV)
@@ -23,5 +24,4 @@ cash.flow.rates <- function(C, r, I){ npv <- sum(C/(1 + r)^(seq(C) - 1)) # NPV
   
   return(a.ratios) # Display sentence
 }
-# Test
-cash.flow.rates(C = c(-800, 300, 300, 300, 300), r = 0.12, I = 800)
+cash.flow.rates(C = c(-800, 300, 300, 300, 300), r = 0.12) # Test
