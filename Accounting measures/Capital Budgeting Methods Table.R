@@ -6,17 +6,16 @@ cash.flow.rates <- function(C, r){ npv <- sum(C/(1 + r)^(seq(C) - 1)) # NPV
   DP <- 0 # Sum of paybacks
   period <- 0 # Payback Period
   I <- -C[1] # Initial Investment
-  C.new <- C[2:length(C)] # Cash flow vector for payback and mirr
+  C1 <- C[2:length(C)] # Cash flow vector for payback and mirr
   
   # Until sum of payback < initial value (IV)
-  while (DP <= I){ for (n in 1:length(C.new)){ DP <- DP + C.new[n]/(1 + r) ^ n
+  while (DP <= I){ for (n in 1:length(C1)){ DP <- DP + C1[n]/(1 + r) ^ n
   
-  if (DP > I){ period <- (I - DP) / (C.new[n] / (1 + r) ^ n) + n # Payback > IV
+  if (DP > I){ period <- (I - DP) / (C1[n] / (1 + r) ^ n) + n # Payback > IV
   
   break } } } # End
   
-  # MIRR
-  mirr <- (sum(C.new*((1+r)^(length(C.new)-seq(C.new))))/I)^(1/length(C.new))-1
+  mirr <- (sum(C1*((1 + r)^(length(C1) - seq(C1))))/I)^(1/length(C1))-1 # MIRR
   
   a.ratios <- cbind(npv, irr, period, mirr) # Put values into list
   
