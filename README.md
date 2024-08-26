@@ -17,4 +17,15 @@ Visualise and analyse yield curves to gain insights into interest rate movements
 ### Duration and Convexity: 
 Compute and understand the duration and convexity of bonds, crucial metrics for assessing interest rate risk.
 
+### Accounting Measures:
+
+```
+             NPV       IRR  Payback      MIRR
+Blue   111.20480 0.1845246 3.416724 0.1570431
+Red    176.59309 0.1170344 3.503125 0.0935682
+Green  116.98654 0.3490343 2.352000 0.2342280
+Yellow  48.50762 0.1302257 3.526533 0.1163082
+```
+#### Table 1. Comparison of Projects by Accounting Measures
+
 More detailed info in wiki: https://github.com/vladislavpyatnitskiy/Fixed-Income-Analysis/wiki
