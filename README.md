@@ -15,6 +15,8 @@ https://github.com/vladislavpyatnitskiy/Fixed-Income-Analysis/tree/main/Bond%20C
 Visualise and analyse yield curves to gain insights into interest rate movements and their impact on fixed income portfolios.
 
 ### Duration and Convexity: 
+![](https://github.com/vladislavpyatnitskiy/Fixed-Income-Analysis/blob/main/Duration%20Plot.jpeg?raw=true)
+
 Compute and understand the duration and convexity of bonds, crucial metrics for assessing interest rate risk.
 
 ### Accounting Measures:
