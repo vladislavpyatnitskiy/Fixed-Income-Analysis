@@ -1,30 +1,31 @@
-# Plot relationship between IRR and NPV
-npv.irr.plt <- function(x, xlim = NULL, h = 0, col, lwd = 3, main = NULL){ 
+npv.irr.plot <- function(C, max = 0.2){ # IRR & NPV graph
   
-  if (is.array(x)) { l <- NULL # Scenario for Multiple Cash Flows
+  NPV <- function(CF, R){ sapply(R, function(r) sum(CF/(1 + r)^(seq(CF)-1))) }
   
-    for (m in 1:ncol(x)){ s <- x[,m]
+  R <- seq(0, max, 0.01) # Define discount rates
+  
+  if (is.matrix(C)) { # Multiple Cash Flow Scenario
     
-      v <- NULL # List for NPV values
-      
-      for (n in seq(0, 1, .01)){ v <- rbind(v, sum(s / (1 + n)^(seq(s) - 1))) }
-      
-      plt <-  plot(x = data.frame(as.matrix(seq(0, 1, .01)), v), xlab = "IRR",
-                   ylab = "NPV", type = "l", xlim = xlim, main = main, las = 1,
-                   col = col, lwd = lwd) # Plot 
-      
-      abline(h = h, col = "black", lwd = 1) # Break Even horizontal line
-      
-      l <- list(l, plt) } } else { v <- NULL # Scenario for one cash flow
+    matplot(R, apply(C, 2, NPV, R = R), type = "l", xlab = "IRR", ylab = "NPV",
+            col = 1:ncol(C), lwd = 3, lty = 1,
+            main = "Relationship between NPV and IRR", las = 1
+    )
+    legend("topright", legend = paste("Scenario",1:ncol(C)), col=1:ncol(C),
+           lty = 1, lwd = 3, bty = "n")
     
-      for (n in seq(0, 1, .01)){ v <- rbind(v, sum(x / (1 + n)^(seq(x) - 1))) }
+  } else { # Single cash flow scenario
     
-      plt <-  plot(x = data.frame(as.matrix(seq(0, 1, .01)),v), xlab = "IRR",
-                   ylab = "NPV", type = "l", xlim = xlim, main = main, las = 1,
-                   col = col, lwd = lwd) # Plot 
-      
-      abline(h = h, col = "black", lwd = 1) }
+    plot(R, NPV(C, R), type = "l", xlab = "IRR", ylab = "NPV", col = "red",
+         lwd=3, main = "Relationship between NPV and IRR", las=1)
+  }
+  abline(h = 0, col = "black", lwd = 1) # Add horizontal line at NPV = 0
+  
+  axis(side = 4, las = 2) # Right y-axis
+  
+  par(mar = c(5, 4, 4, 4)) # Define borders of the plot to fit right y-axis
+    
+  grid(nx = NULL, ny = NULL, col = "grey", lty = "dotted", lwd=1) # grid lines
 }
-npv.irr.plt(x=cbind(c(-1000, 250, 300, 360, 432), c(-800, 300, 300, 300, 150)),
-            xlim = c(0, 1), h = 0, col = "red", lwd = 3,
-            main="Relationship between NPV and IRR") # Test
+# Test the function
+npv.irr.plot(C = cbind(c(-1000, 250, 300, 360, 432),
+                       c(-800, 300, 300, 300, 150)), max = 0.2)
